@@ -11,13 +11,13 @@ app.use(cors()); // <-- THÊM DÒNG NÀY (Cho phép Express nhận mọi nguồn
 const server = http.createServer(app);
 
 // SỬA LẠI ĐOẠN KHỞI TẠO SOCKET.IO NÀY THẬT CHUẨN:
+// Cấu hình chuẩn xác cho Server ở bản Socket.io 4.8.3
 const io = new Server(server, {
     cors: {
-        origin: "*", // Cho phép tất cả các cổng (bao gồm localhost:5500) kết nối vào
-        methods: ["GET", "POST"],
-        credentials: true
+        origin: "*", // Cho phép Live Server http://127.0.0.1:5500 vào thoải mái
+        methods: ["GET", "POST"]
     },
-    allowEIO3: true // Hỗ trợ thêm các phiên bản Socket.io cũ hơn nếu có xung đột
+    transports: ["websocket"] // Ép Server chỉ nhận đường kết nối thẳng WebSockets
 });
 
 io.on('connection', (socket) => {
