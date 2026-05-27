@@ -2,17 +2,22 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const mqtt = require('mqtt');
+const cors = require('cors'); // <-- THÊM DÒNG NÀY
 require('dotenv').config();
 
 const app = express();
+app.use(cors()); // <-- THÊM DÒNG NÀY (Cho phép Express nhận mọi nguồn)
+
 const server = http.createServer(app);
 
-// 1. Cấu hình WebSocket (Cho phép file HTML kết nối vào)
+// SỬA LẠI ĐOẠN KHỞI TẠO SOCKET.IO NÀY THẬT CHUẨN:
 const io = new Server(server, {
     cors: {
-        origin: "*", // Cho phép mọi nguồn kết nối (bao gồm cả file HTML chạy từ ổ cứng của bạn)
-        methods: ["GET", "POST"]
-    }
+        origin: "*", // Cho phép tất cả các cổng (bao gồm localhost:5500) kết nối vào
+        methods: ["GET", "POST"],
+        credentials: true
+    },
+    allowEIO3: true // Hỗ trợ thêm các phiên bản Socket.io cũ hơn nếu có xung đột
 });
 
 io.on('connection', (socket) => {
